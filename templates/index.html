@@ -11,13 +11,39 @@
         <h1>File Manager</h1>
         <ul class="file-list">
             {{range .Files}}
-            <li>
-                <span>{{.}}</span>
-                <div class="actions">
-                    <a href="/files/{{.}}" target="_blank">Download</a>
-                    <button class="copy-btn" data-url="/files/{{.}}">Copy URL</button>
-                    <button class="rename-btn" data-file="{{.}}">Rename</button>
-                    <button class="delete-btn" data-file="{{.}}">Delete</button>
+            <li class="file-item {{if .IsDir}}folder{{end}}" id="file-{{.Name}}">
+                <div class="file-info">
+                    {{if .IsDir}}
+                    <span class="toggle-folder" onclick="toggleFolder('{{.Name}}')">[+]</span>
+                    <strong>{{.Name}}</strong> (Directory)
+                    <div class="sub-files" id="sub-files-{{.Name}}" style="display: none;">
+                        {{range .SubFiles}}
+                            <div class="file-item {{if .IsDir}}folder{{end}}">
+                                {{if .IsDir}}
+                                <span class="toggle-folder" onclick="toggleFolder('{{.Name}}')">[+]</span>
+                                <strong>{{.Name}} (Directory)</strong>
+                                <div class="sub-files" id="sub-files-{{.Name}}" style="display: none;"></div>
+                                {{else}}
+                                <span>{{.Name}} (File)</span>
+                                <div class="actions">
+                                    <a href="/files/{{.Name}}" target="_blank">Download</a>
+                                    <button class="copy-btn" data-url="/files/{{.Name}}">Copy URL</button>
+                                    <button class="rename-btn" data-file="{{.Name}}">Rename</button>
+                                    <button class="delete-btn" data-file="{{.Name}}">Delete</button>
+                                </div>
+                                {{end}}
+                            </div>
+                        {{end}}
+                    </div>
+                    {{else}}
+                    <span>{{.Name}} (File)</span>
+                    <div class="actions">
+                        <a href="/files/{{.Name}}" target="_blank">Download</a>
+                        <button class="copy-btn" data-url="/files/{{.Name}}">Copy URL</button>
+                        <button class="rename-btn" data-file="{{.Name}}">Rename</button>
+                        <button class="delete-btn" data-file="{{.Name}}">Delete</button>
+                    </div>
+                    {{end}}
                 </div>
             </li>
             {{end}}
@@ -27,5 +53,20 @@
         </form>
     </div>
     <script src="/static/script.js"></script>
+    <script>
+        function toggleFolder(folderName) {
+            const folderElement = document.getElementById('sub-files-' + folderName);
+            const toggleButton = folderElement.previousElementSibling;
+
+            // Toggle the display of the folder content (files and actions)
+            if (folderElement.style.display === "none" || folderElement.style.display === "") {
+                folderElement.style.display = "block";  // Show content
+                toggleButton.innerText = "[-]";  // Change the button to [-]
+            } else {
+                folderElement.style.display = "none";  // Hide content
+                toggleButton.innerText = "[+]";  // Change the button to [+]
+            }
+        }
+    </script>
 </body>
 </html>

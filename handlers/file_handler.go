@@ -14,18 +14,21 @@ import (
 
 // ListFilesHandler renders the file list page
 func ListFilesHandler(w http.ResponseWriter, r *http.Request) {
+	// Get files and directories
 	files, err := services.ListFiles(config.FileDirectory)
 	if err != nil {
 		http.Error(w, "Error reading files: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	// Parse the HTML template
 	tmpl, err := template.ParseFiles("templates/index.html")
 	if err != nil {
 		http.Error(w, "Error loading template: "+err.Error(), http.StatusInternalServerError)
 		return
 	}
 
+	// Execute the template and pass the files and directories
 	tmpl.Execute(w, map[string]interface{}{
 		"Files": files,
 	})
