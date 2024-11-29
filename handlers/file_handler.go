@@ -22,7 +22,7 @@ func ListFilesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Parse the HTML template
-	tmpl, err := template.ParseFiles("templates/index.html")
+	tmpl, err := template.ParseFiles("templates/index.html", "templates/renderFiles.html")
 	if err != nil {
 		http.Error(w, "Error loading template: "+err.Error(), http.StatusInternalServerError)
 		return

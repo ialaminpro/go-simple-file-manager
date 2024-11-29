@@ -79,7 +79,43 @@
     <div class="container">
         <h1>File Explorer</h1>
         <ul class="file-list">
-            {{template "renderFiles" .Files}}
+            {{range .Files}}
+            <li class="file-item {{if .IsDir}}folder{{end}} {{if eq .Name ".git"}}git-folder{{end}}" id="file-{{.Name}}">
+                <div class="file-info">
+                    {{if .IsDir}}
+                    <span class="toggle-folder" onclick="toggleFolder('{{.Name}}')">[+]</span>
+                    <strong>{{.Name}}</strong> (Directory)
+                    <div class="sub-files" id="sub-files-{{.Name}}" style="display: none;">
+                        {{range .SubFiles}}
+                            <div class="file-item {{if .IsDir}}folder{{end}} {{if eq .Name ".git"}}git-folder{{end}}">
+                                {{if .IsDir}}
+                                <span class="toggle-folder" onclick="toggleFolder('{{.Name}}')">[+]</span>
+                                <strong>{{.Name}} (Directory)</strong>
+                                <div class="sub-files" id="sub-files-{{.Name}}" style="display: none;"></div>
+                                {{else}}
+                                <span>{{.Name}} (File)</span>
+                                <div class="actions">
+                                    <a href="/files/{{.Name}}" target="_blank">Download</a>
+                                    <button class="copy-btn" data-url="/files/{{.Name}}">Copy URL</button>
+                                    <button class="rename-btn" data-file="{{.Name}}">Rename</button>
+                                    <button class="delete-btn" data-file="{{.Name}}">Delete</button>
+                                </div>
+                                {{end}}
+                            </div>
+                        {{end}}
+                    </div>
+                    {{else}}
+                    <span>{{.Name}} (File)</span>
+                    <div class="actions">
+                        <a href="/files/{{.Name}}" target="_blank">Download</a>
+                        <button class="copy-btn" data-url="/files/{{.Name}}">Copy URL</button>
+                        <button class="rename-btn" data-file="{{.Name}}">Rename</button>
+                        <button class="delete-btn" data-file="{{.Name}}">Delete</button>
+                    </div>
+                    {{end}}
+                </div>
+            </li>
+            {{end}}
         </ul>
     </div>
     <script>

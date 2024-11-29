@@ -1,0 +1,29 @@
+{{define "renderFiles"}}
+<ul>
+    
+    {{range .}}
+    <!-- {{.SubFiles}} -->
+    <li class="file-item {{if .IsDir}}folder{{end}} {{if eq .Name ".git"}}git-folder{{end}}" id="file-{{.Name}}">
+        <div class="file-info">
+        {{if .IsDir}}
+        <span class="toggle-folder" onclick="toggleFolder('{{.Name}}')">[+]</span>
+        <strong>{{.Name}}</strong> (Directory)
+        <!-- Render nested files and folders -->
+        <div class="sub-files" id="sub-files-{{.Name}}" style="display: none;">
+            {{template "renderFiles" .SubFiles}} <!-- Recursively call renderFiles for subfiles -->
+        </div>
+        {{else}}
+         <!-- Render file details -->
+         <span>{{.Name}} (File)</span>
+         <div class="actions">
+             <a href="/files/{{.Name}}" target="_blank">Download</a>
+             <button class="copy-btn" data-url="/files/{{.Name}}">Copy URL</button>
+             <button class="rename-btn" data-file="{{.Name}}">Rename</button>
+             <button class="delete-btn" data-file="{{.Name}}">Delete</button>
+         </div>
+        {{end}}
+        </div>
+    </li>
+    {{end}}
+</ul>
+{{end}}
