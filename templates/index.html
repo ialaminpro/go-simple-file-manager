@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple File Manager</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>File Manager</h1>
+        <ul class="file-list">
+            {{range .Files}}
+            <li>
+                <span>{{.}}</span>
+                <div class="actions">
+                    <a href="/files/{{.}}" target="_blank">Download</a>
+                    <button class="copy-btn" data-url="/files/{{.}}">Copy URL</button>
+                    <button class="rename-btn" data-file="{{.}}">Rename</button>
+                    <button class="delete-btn" data-file="{{.}}">Delete</button>
+                </div>
+            </li>
+            {{end}}
+        </ul>
+        <form action="/download-all" method="POST">
+            <button type="submit" class="download-all">Download All as ZIP</button>
+        </form>
+    </div>
+    <script src="/static/script.js"></script>
+</body>
+</html>
